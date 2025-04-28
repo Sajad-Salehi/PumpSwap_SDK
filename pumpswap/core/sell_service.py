@@ -23,10 +23,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
 
     mint_pubkey = Pubkey.from_string(mint)
     pair_address = await get_pumpswap_pair_address(mint_pubkey)  
-    print(pair_address)
-
     token_price_sol = await get_pumpswap_price(mint_pubkey)
-    print(token_price_sol)
 
     # Compute purchase amounts
     slippage_factor = 1 - config.sell_slippage

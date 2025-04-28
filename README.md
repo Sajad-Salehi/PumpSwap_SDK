@@ -1,3 +1,18 @@
+# PumpSwap SDK
+
+A Python SDK for interacting with the PumpSwap decentralized exchange (DEX) on the Solana blockchain. This SDK simplifies buying, selling, token price retrieval, and pool data access on the PumpSwap platform, allowing developers to integrate Solana-based trading into their applications with ease.
+
+## Features
+
+- **Buy and Sell Tokens**: Easily interact with PumpSwap’s liquidity pools to buy and sell tokens.
+- **Pool Analytics**: Detailed liquidity pool statistics
+- **Price Retrieval**: Fetch the current price of a token in the market.
+- **Transaction Handling**: Handle transactions securely with support for signing and sending transactions.
+- **Solana Blockchain Integration**: Built specifically for Solana, leveraging libraries like `solana` and `solders`.
+
+## Installation
+
+You can install the PumpSwap SDK using [Poetry](https://python-poetry.org/) or `pip`.
 
 ### Using Poetry
 

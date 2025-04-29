@@ -1,5 +1,5 @@
 from solana.rpc.async_api import AsyncClient
-from pumpswap.config.settings import Settings
+from pumpswap_sdk.config.settings import Settings
 
 class SolanaClient:
 

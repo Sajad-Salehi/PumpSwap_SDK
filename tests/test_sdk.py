@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import pytest
 from unittest.mock import patch, AsyncMock
-from pumpswap import PumpSwapSDK
+from pumpswap_sdk import PumpSwapSDK
 
 
 mint = "your-token-mint-address"  # Replace with a valid mint address on pumpswap

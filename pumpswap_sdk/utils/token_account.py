@@ -2,7 +2,7 @@ from solders.pubkey import Pubkey  # type: ignore
 from solana.rpc.async_api import AsyncClient
 from solana.rpc.types import TokenAccountOpts
 from spl.token.instructions import create_associated_token_account, get_associated_token_address
-from pumpswap.config.client import SolanaClient
+from pumpswap_sdk.config.client import SolanaClient
 
 
 async def fetch_token_account(owner: Pubkey, mint: Pubkey):

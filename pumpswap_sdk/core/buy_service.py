@@ -5,14 +5,14 @@ from spl.token.instructions import create_idempotent_associated_token_account
 
 from solders.keypair import Keypair  # type: ignore
 from solders.compute_budget import set_compute_unit_price # type: ignore
-from pumpswap.config.client import SolanaClient
-from pumpswap.config.settings import Settings
-from pumpswap.core.pool_service import get_pumpswap_pair_address
-from pumpswap.core.price_service import get_pumpswap_price
-from pumpswap.utils.constants import *
-from pumpswap.utils.instruction import create_pumpswap_buy_instruction
-from pumpswap.utils.transaction import confirm_transaction, send_transaction
-from pumpswap.utils.wsol import generate_wsol_account_ix 
+from pumpswap_sdk.config.client import SolanaClient
+from pumpswap_sdk.config.settings import Settings
+from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
+from pumpswap_sdk.core.price_service import get_pumpswap_price
+from pumpswap_sdk.utils.constants import *
+from pumpswap_sdk.utils.instruction import create_pumpswap_buy_instruction
+from pumpswap_sdk.utils.transaction import confirm_transaction, send_transaction
+from pumpswap_sdk.utils.wsol import generate_wsol_account_ix 
 
 
 

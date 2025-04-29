@@ -1,9 +1,9 @@
 from solders.pubkey import Pubkey  # type: ignore
 from solana.rpc.async_api import AsyncClient
 
-from pumpswap.config.client import SolanaClient
-from pumpswap.core.pool_service import get_pumpswap_pool_data
-from pumpswap.utils.pool import PumpPool
+from pumpswap_sdk.config.client import SolanaClient
+from pumpswap_sdk.core.pool_service import get_pumpswap_pool_data
+from pumpswap_sdk.utils.pool import PumpPool
 
 
 

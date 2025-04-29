@@ -16,8 +16,8 @@ from spl.token.instructions import (
     initialize_account,
 )
 
-from pumpswap.config.client import SolanaClient
-from pumpswap.utils.constants import *
+from pumpswap_sdk.config.client import SolanaClient
+from pumpswap_sdk.utils.constants import *
 
 async def generate_wsol_account_ix(payer: Keypair, amount_lamports):
 

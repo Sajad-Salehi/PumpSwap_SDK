@@ -2,9 +2,9 @@ import struct
 from solders.pubkey import Pubkey  # type: ignore
 from solders.instruction import AccountMeta  # type: ignore
 from spl.token.instructions import get_associated_token_address
-from pumpswap.core.pool_service import get_pumpswap_pool_data
-from pumpswap.utils.constants import *
-from pumpswap.utils.pool import PumpPool
+from pumpswap_sdk.core.pool_service import get_pumpswap_pool_data
+from pumpswap_sdk.utils.constants import *
+from pumpswap_sdk.utils.pool import PumpPool
 
 
 

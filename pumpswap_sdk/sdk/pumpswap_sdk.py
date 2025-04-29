@@ -1,9 +1,9 @@
-from pumpswap.core.buy_service import buy_pumpswap_token
-from pumpswap.core.sell_service import sell_pumpswap_token
-from pumpswap.core.pool_service import get_pumpswap_pair_address, get_pumpswap_pool_data
-from pumpswap.core.price_service import get_pumpswap_price
-from pumpswap.sdk.models import Constants, Models
-from pumpswap.utils.instruction import create_pumpswap_buy_instruction, create_pumpswap_sell_instruction
+from pumpswap_sdk.core.buy_service import buy_pumpswap_token
+from pumpswap_sdk.core.sell_service import sell_pumpswap_token
+from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address, get_pumpswap_pool_data
+from pumpswap_sdk.core.price_service import get_pumpswap_price
+from pumpswap_sdk.sdk.models import Constants, Models
+from pumpswap_sdk.utils.instruction import create_pumpswap_buy_instruction, create_pumpswap_sell_instruction
 from solders.pubkey import Pubkey  # type: ignore
 
 

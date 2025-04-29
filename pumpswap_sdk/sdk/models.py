@@ -1,6 +1,6 @@
 
-from pumpswap.utils.constants import *
-from pumpswap.utils.pool import PumpPool
+from pumpswap_sdk.utils.constants import *
+from pumpswap_sdk.utils.pool import PumpPool
 
 
 class Models:

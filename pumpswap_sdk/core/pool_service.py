@@ -1,9 +1,9 @@
 from solders.pubkey import Pubkey  # type: ignore
 from solana.rpc.async_api import AsyncClient
 from solana.rpc.types import MemcmpOpts
-from pumpswap.config.client import SolanaClient
-from pumpswap.utils import constants
-from pumpswap.utils.pool import PumpPool
+from pumpswap_sdk.config.client import SolanaClient
+from pumpswap_sdk.utils import constants
+from pumpswap_sdk.utils.pool import PumpPool
 
 
 async def get_pumpswap_pair_address(mint_address: Pubkey):

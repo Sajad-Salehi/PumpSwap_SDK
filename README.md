@@ -26,6 +26,31 @@ poetry add pumpswap-sdk
 pip install pumpswap-sdk
 ```
 
+
+---
+
+## Setup
+
+Before using the SDK, create a `.env` file in your project root with the following environment variables:
+
+```bash
+HTTPS_RPC_ENDPOINT=your_rpc_url_here
+BUY_SLIPPAGE=0.3
+SELL_SLIPPAGE=0.1
+SWAP_PRIORITY_FEE=1500000
+```
+
+Example `.env`:
+
+```bash
+HTTPS_RPC_ENDPOINT=https://api.mainnet-beta.solana.com
+BUY_SLIPPAGE=0.3
+SELL_SLIPPAGE=0.1
+SWAP_PRIORITY_FEE=1500000
+```
+
+---
+
 ### Usage
 
 Here’s how to get started with the PumpSwap SDK in your Python project.

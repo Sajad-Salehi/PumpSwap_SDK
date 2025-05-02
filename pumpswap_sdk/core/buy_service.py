@@ -33,7 +33,7 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
     try:
         client: AsyncClient = await SolanaClient().get_instance()
     
-        wsol_token_account, wsol_ix_list = await generate_wsol_account_ix(payer, amount_lamports)
+        wsol_token_account, wsol_ix_list = await generate_wsol_account_ix(payer, max_amount_lamports)
 
         # Create the buy transaction instruction
         accounts, data = await create_pumpswap_buy_instruction(

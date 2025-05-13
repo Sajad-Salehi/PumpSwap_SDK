@@ -7,8 +7,8 @@ from unittest.mock import patch, AsyncMock
 from pumpswap_sdk import PumpSwapSDK
 
 
-mint = "8u8b6QfU6zXmKsyE34L5v96sTRHPcGXuweSEsGSNpump"  # Replace with a valid mint address on pumpswap
-user_private_key = "2Pbc1WsF7KZHzJU2QCtevutTT5hnkNu9yFAnR1ShPzhcmf2KoiXSAJLz7BuVBGKmYd4cZLKDLKA1aj7TGkBFqciL"  # Replace with a valid private key
+mint = "your-token-mint"  # Replace with a valid mint address on pumpswap
+user_private_key = "your-private-key"  # Replace with a valid private key
 token_amount = 10.0 # Example token amount to sell
 sol_amount = 0.0001 # Example SOL amount to buy
 

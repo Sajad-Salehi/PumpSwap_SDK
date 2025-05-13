@@ -12,10 +12,11 @@ class PumpPool:
         "pool_base_token_account" / Bytes(32),
         "pool_quote_token_account" / Bytes(32),
         "lp_supply" / Int64ul,
+        "coin_creator" / Bytes(32),
     )
 
     def __init__(self, data: bytes) -> None:
-        parsed = self._STRUCT.parse(data[8:211])
+        parsed = self._STRUCT.parse(data[8:243])
         self.pool_bump = parsed.pool_bump
         self.index = parsed.index
         self.creator = Pubkey.from_bytes(parsed.creator)
@@ -25,3 +26,4 @@ class PumpPool:
         self.pool_base_token_account = Pubkey.from_bytes(parsed.pool_base_token_account)
         self.pool_quote_token_account = Pubkey.from_bytes(parsed.pool_quote_token_account)
         self.lp_supply = parsed.lp_supply
+        self.coin_creator = Pubkey.from_bytes(parsed.coin_creator)

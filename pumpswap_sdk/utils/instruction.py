@@ -17,6 +17,10 @@ async def create_pumpswap_buy_instruction(pool_id: Pubkey, user: Pubkey, mint: P
     pool_base_token_account = pool_data.pool_base_token_account
     pool_quote_token_account = pool_data.pool_quote_token_account
 
+    vault_auth_seeds = [b"creator_vault", bytes(pool_data.coin_creator)]
+    vault_auth_pda, _ = Pubkey.find_program_address(vault_auth_seeds, PUMP_AMM_PROGRAM_ID)
+    vault_ata = get_associated_token_address(vault_auth_pda, WSOL_TOKEN_ACCOUNT)
+
     accounts = [
         AccountMeta(pubkey=pool_id, is_signer=False, is_writable=False),
         AccountMeta(pubkey=user, is_signer=True, is_writable=True),
@@ -35,6 +39,8 @@ async def create_pumpswap_buy_instruction(pool_id: Pubkey, user: Pubkey, mint: P
         AccountMeta(pubkey=ASSOCIATED_TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
         AccountMeta(pubkey=EVENT_AUTHORITY, is_signer=False, is_writable=False),
         AccountMeta(pubkey=PUMP_AMM_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(pubkey=vault_ata, is_signer=False, is_writable=True),
+        AccountMeta(pubkey=vault_auth_pda, is_signer=False, is_writable=False),
     ]
     
     data = (
@@ -58,6 +64,10 @@ async def create_pumpswap_sell_instruction(pool_id: Pubkey, user: Pubkey, mint: 
     pool_base_token_account = pool_data.pool_base_token_account
     pool_quote_token_account = pool_data.pool_quote_token_account
 
+    vault_auth_seeds = [b"creator_vault", bytes(pool_data.coin_creator)]
+    vault_auth_pda, _ = Pubkey.find_program_address(vault_auth_seeds, PUMP_AMM_PROGRAM_ID)
+    vault_ata = get_associated_token_address(vault_auth_pda, WSOL_TOKEN_ACCOUNT)
+
     accounts = [
         AccountMeta(pubkey=pool_id, is_signer=False, is_writable=False),
         AccountMeta(pubkey=user, is_signer=True, is_writable=True),
@@ -76,6 +86,8 @@ async def create_pumpswap_sell_instruction(pool_id: Pubkey, user: Pubkey, mint: 
         AccountMeta(pubkey=ASSOCIATED_TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
         AccountMeta(pubkey=EVENT_AUTHORITY, is_signer=False, is_writable=False),
         AccountMeta(pubkey=PUMP_AMM_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(pubkey=vault_ata, is_signer=False, is_writable=True),
+        AccountMeta(pubkey=vault_auth_pda, is_signer=False, is_writable=False),
     ]
     
     data = (

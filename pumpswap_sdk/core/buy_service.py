@@ -47,7 +47,8 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
             payer.pubkey(), payer.pubkey(), mint_pubkey
         )
 
-        ix = [
+        if config.swap_priority_fee > 0:
+            ix = [
             set_compute_unit_price(config.swap_priority_fee),
             wsol_ix_list[0],
             wsol_ix_list[1],
@@ -55,7 +56,14 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
             buy_ix,
             wsol_ix_list[2]
         ]
-
+        else:
+            ix = [
+            wsol_ix_list[0],
+            wsol_ix_list[1],
+            token_account_ix,
+            buy_ix,
+            wsol_ix_list[2]
+        ]
 
         tx_buy = await send_transaction(client, payer, [payer], ix)
         if not tx_buy:

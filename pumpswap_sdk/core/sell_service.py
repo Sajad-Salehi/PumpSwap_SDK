@@ -51,8 +51,10 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
                 TOKEN_PROGRAM_ID, wsol_token_account, payer.pubkey(), payer.pubkey()
             )
         )
+        ix = []
 
-        ix = [set_compute_unit_price(config.swap_priority_fee)]
+        if config.swap_priority_fee > 0:
+            ix = [set_compute_unit_price(config.swap_priority_fee)]
         if wsol_token_account_instructions:
             ix.append(wsol_token_account_instructions)
         ix.append(sell_ix)
@@ -89,7 +91,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
     except Exception as e:
         return  {
                 "status": False,
-                "message": "Transaction Confirmation Failed",
+                "message": f"Transaction Confirmation Failed {e}",
                 "data": None
         }
 

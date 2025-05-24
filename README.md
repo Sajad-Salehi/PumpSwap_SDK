@@ -58,7 +58,7 @@ Here’s how to get started with the PumpSwap SDK in your Python project.
 1. **Initialize the SDK**
 
 ```python
-from pumpswap import PumpSwapSDK
+from pumpswap_sdk import PumpSwapSDK
 from solders.pubkey import Pubkey
 
 # Initialize the SDK

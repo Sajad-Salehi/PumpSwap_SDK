@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pumpswap-sdk"
-version = "0.1.4"
+version = "0.1.5"
 description = "A Python SDK for interacting with the PumpSwap decentralized exchange (DEX) on Solana blockchain. Simplifies buying, selling, token price retrieval, and pool data access."
 authors = ["Sajad <SajadSolidity@gmail.com>"]
 license = "MIT"

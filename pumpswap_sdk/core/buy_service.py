@@ -90,7 +90,7 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
             "message": "Transaction completed successfully",
             "data": {
                 "tx_id": tx_buy.value,
-                "amount": token_amount,
+                "amount": round(token_amount, 6),
                 "price": token_price_sol
             }
         }

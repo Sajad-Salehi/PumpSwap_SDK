@@ -30,6 +30,9 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
     token_amount = sol_amount / token_price_sol
     max_amount_lamports = int(amount_lamports * (1 + config.buy_slippage))
 
+    if config.buy_slippage <= 0:
+        max_amount_lamports += int(0.0001 * LAMPORTS_PER_SOL)  # Add base slippage if slippage is not set
+
     try:
         client: AsyncClient = await SolanaClient().get_instance()
     

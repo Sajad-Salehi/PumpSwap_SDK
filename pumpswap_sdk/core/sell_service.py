@@ -25,10 +25,13 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
     pair_address = await get_pumpswap_pair_address(mint_pubkey)  
     token_price_sol = await get_pumpswap_price(mint_pubkey)
 
-    # Compute purchase amounts
-    slippage_factor = 1 - config.sell_slippage
-    min_sol_output = token_amount * token_price_sol
-    min_sol_output_lamports = int(min_sol_output * slippage_factor * LAMPORTS_PER_SOL)
+    if config.sell_slippage <= 0:
+        min_sol_output_lamports = int(0)
+    
+    else:
+        slippage_factor = 1 - config.sell_slippage
+        min_sol_output = token_amount * token_price_sol
+        min_sol_output_lamports = int(min_sol_output * slippage_factor * LAMPORTS_PER_SOL)
 
     try:
         client: AsyncClient = await SolanaClient().get_instance()

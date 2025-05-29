@@ -98,7 +98,7 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
     except Exception as e:
         return  {
                 "status": False,
-                "message": "Transaction Confirmation Failed",
+                "message": f"Transaction Confirmation Failed {str(e)}",
                 "data": None
         }
 

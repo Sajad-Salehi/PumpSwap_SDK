@@ -29,7 +29,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
         min_sol_output_lamports = int(0)
     
     else:
-        slippage_factor = 1 - config.sell_slippage
+        slippage_factor = 1 - (config.sell_slippage / 100)
         min_sol_output = token_amount * token_price_sol
         min_sol_output_lamports = int(min_sol_output * slippage_factor * LAMPORTS_PER_SOL)
 
@@ -94,7 +94,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
     except Exception as e:
         return  {
                 "status": False,
-                "message": f"Transaction Confirmation Failed {e}",
+                "message": f"Transaction Confirmation Failed {str(e)}",
                 "data": None
         }
 

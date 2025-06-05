@@ -11,6 +11,7 @@ from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
 from pumpswap_sdk.core.price_service import get_pumpswap_price
 from pumpswap_sdk.utils.constants import *
 from pumpswap_sdk.utils.instruction import create_pumpswap_sell_instruction
+from pumpswap_sdk.utils.process_tx import handle_pumpswap_sell_tx
 from pumpswap_sdk.utils.token_account import fetch_token_account
 from pumpswap_sdk.utils.transaction import confirm_transaction, send_transaction
 
@@ -81,12 +82,14 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
                 "data": None
             }
 
+        tx_data = await handle_pumpswap_sell_tx(client, mint_pubkey, tx_sell.value)
         return {
                     "status": True,
                     "message": "Transaction completed successfully",
                     "data": {
                         "tx_id": tx_sell.value,
-                        "amount": token_amount,
+                        "sol_amount": tx_data.get("sol_amount", 0),
+                        "token_amount": token_amount,
                         "price": token_price_sol
                     }
                 }

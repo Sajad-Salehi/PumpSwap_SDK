@@ -9,37 +9,24 @@ from pumpswap_sdk import PumpSwapSDK
 
 mint = "your-token-mint"  # Replace with a valid mint address on pumpswap
 user_private_key = "your-private-key"  # Replace with a valid private key
-token_amount = 10.0 # Example token amount to sell
 sol_amount = 0.0001 # Example SOL amount to buy
 
 
 @pytest.mark.asyncio
-async def test_buy():
+async def test_buy_and_sell():
     sdk = PumpSwapSDK()
 
-    # Mock the buy_pumpswap_token function
-    with patch('pumpswap_sdk.core.buy_service.buy_pumpswap_token', new_callable=AsyncMock) as mock_buy:
-        mock_buy.return_value = "buy_success"
+    # Perform a real buy
+    buy_result = await sdk.buy(mint, sol_amount, user_private_key)
+    print(f"Buy result: {buy_result}")
 
-        # Call the SDK method
-        result = await sdk.buy(mint, sol_amount, user_private_key)
+    assert buy_result["status"] is True
 
-        # Assert the result and the function call
-        assert result["status"] is True
-        assert result["message"] == "Transaction completed successfully"
+    # Extract the token amount actually received
+    token_amount = buy_result["data"]["token_amount"]
 
+    # Now sell that exact amount
+    sell_result = await sdk.sell(mint, token_amount, user_private_key)
+    print(f"Sell result: {sell_result}")
 
-@pytest.mark.asyncio
-async def test_sell():
-    sdk = PumpSwapSDK()
-
-    # Mock the sell_pumpswap_token function
-    with patch('pumpswap_sdk.core.sell_service.sell_pumpswap_token', new_callable=AsyncMock) as mock_sell:
-        mock_sell.return_value = "sell_success"
-
-        # Call the SDK method
-        result = await sdk.sell(mint, token_amount, user_private_key)
-
-        # Assert the result and the function call
-        assert result["status"] is True
-        assert result["message"] == "Transaction completed successfully"
+    assert sell_result["status"] is True

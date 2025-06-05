@@ -11,6 +11,7 @@ from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
 from pumpswap_sdk.core.price_service import get_pumpswap_price
 from pumpswap_sdk.utils.constants import *
 from pumpswap_sdk.utils.instruction import create_pumpswap_buy_instruction
+from pumpswap_sdk.utils.process_tx import handle_pumpswap_buy_tx
 from pumpswap_sdk.utils.transaction import confirm_transaction, send_transaction
 from pumpswap_sdk.utils.wsol import generate_wsol_account_ix 
 
@@ -84,13 +85,16 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
                 "message": f"Transaction Confirmation Failed {resp}",
                 "data": None
             }
+        
+        tx_data = await handle_pumpswap_buy_tx(client, mint_pubkey, tx_buy.value)
 
         return {
             "status": True,
             "message": "Transaction completed successfully",
             "data": {
                 "tx_id": tx_buy.value,
-                "amount": round(token_amount, 6),
+                "sol_amount": tx_data["sol_amount"],
+                "token_amount": tx_data["token_amount"],
                 "price": token_price_sol
             }
         }

@@ -9,11 +9,15 @@ from pumpswap_sdk.config.client import SolanaClient
 from pumpswap_sdk.config.settings import Settings
 from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
 from pumpswap_sdk.core.price_service import get_pumpswap_price
+from pumpswap_sdk.utils.balance import get_spl_token_balance
 from pumpswap_sdk.utils.constants import *
 from pumpswap_sdk.utils.instruction import create_pumpswap_sell_instruction
+from pumpswap_sdk.utils.process_tx import handle_pumpswap_sell_tx
 from pumpswap_sdk.utils.token_account import fetch_token_account
 from pumpswap_sdk.utils.transaction import confirm_transaction, send_transaction
 
+from spl.token.instructions import get_associated_token_address
+from pumpswap_sdk.utils.spl_utils import close_associated_token_account
 
 
 async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
@@ -35,6 +39,10 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
 
     try:
         client: AsyncClient = await SolanaClient().get_instance()
+
+        associated_token_account = get_associated_token_address(payer.pubkey(), mint_pubkey)
+        spl_token_balance = round(await get_spl_token_balance(associated_token_account), 6)
+
         wsol_token_account, wsol_token_account_instructions = await fetch_token_account(
             payer.pubkey(),
             WSOL_TOKEN_ACCOUNT
@@ -63,6 +71,8 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
         ix.append(sell_ix)
         ix.append(close_account_instructions)
 
+        if spl_token_balance <= token_amount:
+            ix.append(close_associated_token_account(payer, associated_token_account))
 
         tx_sell = await send_transaction(client, payer, [payer], ix)
         if not tx_sell:
@@ -81,15 +91,17 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
                 "data": None
             }
 
+        tx_data = await handle_pumpswap_sell_tx(client, mint_pubkey, tx_sell.value)
         return {
-                    "status": True,
-                    "message": "Transaction completed successfully",
-                    "data": {
-                        "tx_id": tx_sell.value,
-                        "amount": token_amount,
-                        "price": token_price_sol
-                    }
-                }
+            "status": True,
+            "message": "Transaction completed successfully",
+            "data": {
+                "tx_id": tx_sell.value,
+                "sol_amount": tx_data.get("sol_amount", 0),
+                "token_amount": token_amount,
+                "price": token_price_sol
+            }
+        }
 
     except Exception as e:
         return  {

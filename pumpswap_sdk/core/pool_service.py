@@ -29,8 +29,7 @@ async def get_pumpswap_pair_address(mint_address: Pubkey):
         if response.value:
             pools = response.value[0].pubkey 
             return pools
-        else:
-            return None
+    raise Exception("No matching pool found")
 
 
 

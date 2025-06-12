@@ -7,7 +7,7 @@ from solders.compute_budget import set_compute_unit_price # type: ignore
 
 from pumpswap_sdk.config.client import SolanaClient
 from pumpswap_sdk.config.settings import Settings
-from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
+from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address, get_pumpswap_pool_data
 from pumpswap_sdk.core.price_service import get_pumpswap_price
 from pumpswap_sdk.utils.balance import get_spl_token_balance
 from pumpswap_sdk.utils.constants import *
@@ -26,6 +26,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
     payer = Keypair.from_base58_string(payer_pk)
 
     mint_pubkey = Pubkey.from_string(mint)
+    pool_data = await get_pumpswap_pool_data(mint_pubkey)
     pair_address = await get_pumpswap_pair_address(mint_pubkey)  
     token_price_sol = await get_pumpswap_price(mint_pubkey)
 
@@ -34,8 +35,15 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
     
     else:
         slippage_factor = 1 - (config.sell_slippage / 100)
-        min_sol_output = token_amount * token_price_sol
-        min_sol_output_lamports = int(min_sol_output * slippage_factor * LAMPORTS_PER_SOL)
+        if pool_data.base_mint == WSOL_TOKEN_ACCOUNT:
+            token_amount_after_slippage = token_amount * slippage_factor
+            min_sol_output = token_amount_after_slippage * token_price_sol
+            min_sol_output_lamports = min_sol_output * LAMPORTS_PER_SOL
+
+        else:
+            min_sol_output = token_amount * token_price_sol
+            min_sol_output_lamports = int(min_sol_output * slippage_factor * LAMPORTS_PER_SOL)
+
 
     try:
         client: AsyncClient = await SolanaClient().get_instance()
@@ -50,7 +58,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
 
         # Create the buy transaction instruction
         accounts, data = await create_pumpswap_sell_instruction(
-            pair_address, payer.pubkey(), mint_pubkey, 
+            pool_data, pair_address, payer.pubkey(), 
             token_amount, wsol_token_account, min_sol_output_lamports
         )
 
@@ -71,7 +79,7 @@ async def sell_pumpswap_token(mint: str, token_amount: float, payer_pk: str):
         ix.append(sell_ix)
         ix.append(close_account_instructions)
 
-        if spl_token_balance <= token_amount:
+        if spl_token_balance <= token_amount and not pool_data.base_mint == WSOL_TOKEN_ACCOUNT:
             ix.append(close_associated_token_account(payer, associated_token_account))
 
         tx_sell = await send_transaction(client, payer, [payer], ix)

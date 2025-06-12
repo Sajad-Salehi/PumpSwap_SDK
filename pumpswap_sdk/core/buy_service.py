@@ -7,7 +7,7 @@ from solders.keypair import Keypair  # type: ignore
 from solders.compute_budget import set_compute_unit_price # type: ignore
 from pumpswap_sdk.config.client import SolanaClient
 from pumpswap_sdk.config.settings import Settings
-from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address
+from pumpswap_sdk.core.pool_service import get_pumpswap_pair_address, get_pumpswap_pool_data
 from pumpswap_sdk.core.price_service import get_pumpswap_price
 from pumpswap_sdk.utils.constants import *
 from pumpswap_sdk.utils.instruction import create_pumpswap_buy_instruction
@@ -23,16 +23,25 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
     payer = Keypair.from_base58_string(payer_pk)
 
     mint_pubkey = Pubkey.from_string(mint)
+    pool_data = await get_pumpswap_pool_data(mint_pubkey)
     pair_address = await get_pumpswap_pair_address(mint_pubkey)  
-
-    # Compute purchase amounts
-    amount_lamports = int(sol_amount * LAMPORTS_PER_SOL)
     token_price_sol = await get_pumpswap_price(mint_pubkey)
-    token_amount = sol_amount / token_price_sol
-    max_amount_lamports = int(amount_lamports * (1 + (config.buy_slippage / 100)))
 
-    if config.buy_slippage <= 0:
-        max_amount_lamports += int(0.0001 * LAMPORTS_PER_SOL)  # Add base slippage if slippage is not set
+
+    if pool_data.base_mint == WSOL_TOKEN_ACCOUNT:
+        amount_lamports = int(sol_amount * LAMPORTS_PER_SOL)
+        max_amount_lamports = amount_lamports
+        token_amount = (sol_amount / token_price_sol) * (1 - (config.buy_slippage / 100))
+        if config.buy_slippage <= 0:
+            token_amount -= 1
+
+    else:
+        amount_lamports = int(sol_amount * LAMPORTS_PER_SOL)
+        token_amount = sol_amount / token_price_sol
+        max_amount_lamports = int(amount_lamports * (1 + (config.buy_slippage / 100)))
+        if config.buy_slippage <= 0:
+            max_amount_lamports += int(0.0001 * LAMPORTS_PER_SOL)
+
 
     try:
         client: AsyncClient = await SolanaClient().get_instance()
@@ -41,7 +50,7 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
 
         # Create the buy transaction instruction
         accounts, data = await create_pumpswap_buy_instruction(
-            pair_address, payer.pubkey(), mint_pubkey, 
+            pool_data, pair_address, payer.pubkey(), mint_pubkey, 
             token_amount, wsol_token_account, max_amount_lamports
         )
 

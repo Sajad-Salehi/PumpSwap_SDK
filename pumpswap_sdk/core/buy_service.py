@@ -82,7 +82,7 @@ async def buy_pumpswap_token(mint: str, sol_amount: float, payer_pk: str):
         if not tx_buy:
             return {
                 "status": False,
-                "message": "Transaction Failed",
+                "message": f"Transaction Failed {tx_buy}",
                 "data": None
             }
 

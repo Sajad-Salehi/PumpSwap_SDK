@@ -23,7 +23,8 @@ async def get_pumpswap_pair_address(mint_address: Pubkey):
         response = await client.get_program_accounts(
             constants.PUMP_AMM_PROGRAM_ID,
             filters=filters,
-            encoding='base64'
+            encoding='base64',
+            commitment="processed"
         )
 
         if response.value:
@@ -50,7 +51,8 @@ async def get_pumpswap_pool_data(mint: Pubkey):
         response = await client.get_program_accounts(
             constants.PUMP_AMM_PROGRAM_ID,
             filters=filters,
-            encoding='base64'
+            encoding='base64',
+            commitment="processed"
         )
 
         if response.value:
